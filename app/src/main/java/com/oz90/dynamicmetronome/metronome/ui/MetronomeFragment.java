@@ -128,8 +128,10 @@ public class MetronomeFragment extends Fragment implements MetronomeView {
                 section.setBeat(seekBar.getProgress());
                 section.setMiliseconds(60000 / section.getBeat());
                 updateSection();
-                stopTimer();
-                startTimer();
+                if (playing) {
+                    stopTimer();
+                    startTimer();
+                }
             }
         });
     }
@@ -265,6 +267,9 @@ public class MetronomeFragment extends Fragment implements MetronomeView {
     public void onPlayClick() {
         int imgResource;
         setBeat(0, false);
+        if (!playing && editing) {
+            editName(false);
+        }
         updateSection();
 
         if (playing) {
@@ -283,19 +288,7 @@ public class MetronomeFragment extends Fragment implements MetronomeView {
 
     @OnClick(R.id.imgEditName)
     public void onEditNameClick() {
-        int imgResource;
-        if (editing) {
-            imgResource = android.R.drawable.ic_menu_edit;
-            setName();
-        } else {
-            imgResource = android.R.drawable.ic_menu_save;
-            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.showSoftInput(textSectionName, InputMethodManager.SHOW_IMPLICIT);
-            textSectionName.selectAll();
-        }
-        editing = !editing;
-        textSectionName.setEnabled(editing);
-        imgEditName.setImageResource(imgResource);
+        editName(true);
     }
 
     private void startTimer() {
@@ -307,7 +300,7 @@ public class MetronomeFragment extends Fragment implements MetronomeView {
     }
 
     private void setBeat(int modifier, boolean update) {
-        int beat = 0;
+        int beat;
         if (textBeat.getText().toString().trim().length() == 0) {
             beat = this.section.getBeat();
             //presenter.getMainMetronome();
@@ -326,14 +319,32 @@ public class MetronomeFragment extends Fragment implements MetronomeView {
         }
     }
 
-    private void setName() {
+    private void editName(boolean update) {
+        int imgResource;
+        if (editing) {
+            imgResource = android.R.drawable.ic_menu_edit;
+            setName(update);
+        } else {
+            imgResource = android.R.drawable.ic_menu_save;
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(textSectionName, InputMethodManager.SHOW_IMPLICIT);
+            textSectionName.selectAll();
+        }
+        editing = !editing;
+        textSectionName.setEnabled(editing);
+        imgEditName.setImageResource(imgResource);
+    }
+
+    private void setName(boolean update) {
         String newName = textSectionName.getText().toString().trim();
         if (newName.length() != 0) {
             if (!newName.equals(this.section.getName())) {
                 this.section.setName(newName);
             }
         }
-        updateSection();
+        if (update) {
+            updateSection();
+        }
     }
 
     private void updateSection() {
@@ -347,6 +358,9 @@ public class MetronomeFragment extends Fragment implements MetronomeView {
         textBeat.setText(Integer.toString(this.section.getBeat()));
         seekBarBeat.setProgress(this.section.getBeat());
         spinnerBeatsPerBar.setSelection(this.section.getBeatsPerBar() - 1);
+        textSectionName.setEnabled(false);
+        imgEditName.setImageResource(android.R.drawable.ic_menu_edit);
+        editing = false;
     }
 
     private void createNewSection(String name) {
