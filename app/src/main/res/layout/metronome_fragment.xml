@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".metronome.ui.MetronomeFragment"
+    android:id="@+id/main_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_horizontal_margin">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Medium Text"
+            android:id="@+id/textSectionName"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:enabled="false"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_toLeftOf="@+id/imgEditName"
+            android:layout_toStartOf="@+id/imgEditName" />
+
+        <ImageButton
+            android:layout_width="@dimen/img_edit_name"
+            android:layout_height="@dimen/img_edit_name"
+            android:id="@+id/imgEditName"
+            android:src="@android:drawable/ic_menu_edit"
+            android:scaleType="fitCenter"
+            android:tint="@android:color/white"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-1"
+            android:id="@+id/btnMinusOne"
+            android:layout_below="@id/textSectionName"
+            android:layout_toLeftOf="@+id/textBeat"
+            android:layout_toStartOf="@+id/textBeat" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+1"
+            android:id="@+id/btnPlusOne"
+            android:layout_above="@+id/textBeat"
+            android:layout_toRightOf="@+id/textBeat"
+            android:layout_toEndOf="@+id/textBeat" />
+
+        <EditText
+            android:layout_width="@dimen/text_beat_size_double"
+            android:layout_height="@dimen/text_beat_size"
+            android:inputType="number"
+            android:text="150"
+            android:id="@+id/textBeat"
+            android:layout_below="@+id/btnMinusOne"
+            android:gravity="center"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-5"
+            android:id="@+id/btnMinusFive"
+            android:layout_below="@+id/textBeat"
+            android:layout_toLeftOf="@+id/textBeat"
+            android:layout_toStartOf="@+id/textBeat" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+5"
+            android:id="@+id/btnPlusFive"
+            android:layout_below="@+id/textBeat"
+            android:layout_alignLeft="@+id/btnPlusOne"
+            android:layout_alignStart="@+id/btnPlusOne" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btnPlusFive"
+            android:orientation="vertical"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:gravity="center">
+
+            <SeekBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/seekBarBeat"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imgPlay"
+                android:src="@android:drawable/ic_media_play"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/colorPrimaryDark"
+                android:tint="@android:color/white"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+
+            <Spinner
+                android:layout_width="@dimen/beats_per_bar"
+                android:layout_height="41dp"
+                android:id="@+id/spinnerBeatsPerBar"
+                android:gravity="center"
+                android:paddingLeft="20dp"></Spinner>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/metronome.title.beats.per.bar"
+                android:id="@+id/textBeatsPerBar"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textTick"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_marginTop="@dimen/text_tick_margin"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</FrameLayout>

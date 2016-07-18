@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Dynamic Metronome</string>
+
+    <string name="main.menu.action.about">About</string>
+
+    <string name="main.header.metronome">Metronome</string>
+    <string name="main.header.presets">Presets</string>
+    <string name="metronome.title.beats.per.bar">Beats per bar</string>
+    <string name="sections.delete.message">Deleted preset: %s</string>
+    <string name="sections.adapter.beat.tittle">Beat: %s</string>
+    <string name="sections.adapter.beat.per.bar.tittle">Beat per bar: %s</string>
+</resources>
