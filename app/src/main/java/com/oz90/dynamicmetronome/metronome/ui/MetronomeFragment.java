@@ -5,8 +5,6 @@ import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +25,7 @@ import com.oz90.dynamicmetronome.DynamicMetronomeApp;
 import com.oz90.dynamicmetronome.MainActivity;
 import com.oz90.dynamicmetronome.R;
 import com.oz90.dynamicmetronome.entities.Section;
+import com.oz90.dynamicmetronome.libs.audio.Metronome;
 import com.oz90.dynamicmetronome.metronome.MetronomePresenter;
 import com.oz90.dynamicmetronome.metronome.di.MetronomeComponent;
 
@@ -71,12 +70,8 @@ public class MetronomeFragment extends Fragment implements MetronomeView {
 
     Section section;
     private boolean playing = false, editing = false;
-    private long startTime = 0;
-    private int tick;
     private MainActivity mainActivity;
-    Handler timerHandler = new Handler();
-    Runnable timerRunnable;
-    MediaPlayer mediaPlayerHi, mediaPlayerLow;
+    Metronome metronome;
 
     @Inject
     MetronomePresenter presenter;
@@ -96,16 +91,9 @@ public class MetronomeFragment extends Fragment implements MetronomeView {
         if (this.section != null) {
             setupSeekBarBeat();
             setupSpinnerBeatsPerBar();
-            setupTimer();
         }
-        setupMediaPlayer();
         mainActivity = (MainActivity) getActivity();
         return view;
-    }
-
-    private void setupMediaPlayer() {
-        mediaPlayerHi = MediaPlayer.create(getContext(), R.raw.pinghi);
-        mediaPlayerLow = MediaPlayer.create(getContext(), R.raw.pinglow);
     }
 
     private void setupSeekBarBeat() {
@@ -128,45 +116,18 @@ public class MetronomeFragment extends Fragment implements MetronomeView {
                 section.setBeat(seekBar.getProgress());
                 section.setMiliseconds(60000 / section.getBeat());
                 updateSection();
-                if (playing) {
-                    stopTimer();
-                    startTimer();
-                }
+                checkPlaying();
             }
         });
     }
 
-    private void setupTimer() {
-        timerRunnable = new Runnable() {
-            @Override
-            public void run() {
-
-                textTick.setText(Integer.toString(tick));
-                int beatsPerBar = section.getBeatsPerBar();
-                if (tick == 1) {
-                    mediaPlayerHi.start();
-                }
-                else {
-                    mediaPlayerLow.start();
-                }
-                if (tick < beatsPerBar) {
-                    tick++;
-                } else {
-                    tick = 1;
-                }
-                long milisBeat = section.getMiliseconds();
-                timerHandler.postDelayed(timerRunnable, milisBeat);
-            }
-        };
-    }
-
     private void setupSpinnerBeatsPerBar() {
         int topBeatsPerBar = Section.TOP_BEATS_PER_BAR;
-        List<Integer> beatsPerBarList = new ArrayList<Integer>();
+        List<Integer> beatsPerBarList = new ArrayList<>();
         for (int i = 0; i < topBeatsPerBar; i++) {
             beatsPerBarList.add(i + 1);
         }
-        final ArrayAdapter<Integer> beatsPerBarAdapter = new ArrayAdapter<Integer>(getContext(), R.layout.support_simple_spinner_dropdown_item, beatsPerBarList);
+        final ArrayAdapter<Integer> beatsPerBarAdapter = new ArrayAdapter<>(getContext(), R.layout.support_simple_spinner_dropdown_item, beatsPerBarList);
         spinnerBeatsPerBar.setAdapter(beatsPerBarAdapter);
         spinnerBeatsPerBar.setSelection(this.section.getBeatsPerBar() - 1);
         spinnerBeatsPerBar.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -175,6 +136,11 @@ public class MetronomeFragment extends Fragment implements MetronomeView {
                 int selectedBeatsPerBar = (int) spinnerBeatsPerBar.getSelectedItem();
                 section.setBeatsPerBar(selectedBeatsPerBar);
                 updateSection();
+
+                //checkPlaying();
+                if (playing) {
+                    metronome.setBeat(section.getBeatsPerBar());
+                }
             }
 
             @Override
@@ -182,6 +148,13 @@ public class MetronomeFragment extends Fragment implements MetronomeView {
 
             }
         });
+    }
+
+    private void checkPlaying() {
+        if (playing) {
+            stopTimer();
+            startTimer();
+        }
     }
 
     private void setupInjection() {
@@ -278,7 +251,6 @@ public class MetronomeFragment extends Fragment implements MetronomeView {
             stopTimer();
         } else {
             imgResource = android.R.drawable.ic_media_pause;
-            tick = 1;
             startTimer();
         }
         textBeat.setEnabled(playing);
@@ -292,11 +264,14 @@ public class MetronomeFragment extends Fragment implements MetronomeView {
     }
 
     private void startTimer() {
-        timerHandler.postDelayed(timerRunnable, 0);
+        metronome = new Metronome();
+        metronome.setUpVariables(section.getBeat(), section.getBeatsPerBar(), 523.25, 880);
+        metronome.playPublic();
     }
 
     private void stopTimer() {
-        timerHandler.removeCallbacks(timerRunnable);
+        //timerHandler.removeCallbacks(timerRunnable);
+        metronome.stop();
     }
 
     private void setBeat(int modifier, boolean update) {
