@@ -6,6 +6,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import com.oz90.dynamicmetronome.DynamicMetronomeApp;
 import com.oz90.dynamicmetronome.MainActivity;
 import com.oz90.dynamicmetronome.R;
 import com.oz90.dynamicmetronome.entities.Section;
+import com.oz90.dynamicmetronome.entities.Track;
 import com.oz90.dynamicmetronome.libs.audio.Metronome;
 import com.oz90.dynamicmetronome.metronome.MetronomePresenter;
 import com.oz90.dynamicmetronome.metronome.di.MetronomeComponent;
@@ -116,7 +118,7 @@ public class MetronomeFragment extends Fragment implements MetronomeView {
                 section.setBeat(seekBar.getProgress());
                 section.setMiliseconds(60000 / section.getBeat());
                 updateSection();
-                checkPlaying();
+                updateMetronomeParameters();
             }
         });
     }
@@ -137,10 +139,7 @@ public class MetronomeFragment extends Fragment implements MetronomeView {
                 section.setBeatsPerBar(selectedBeatsPerBar);
                 updateSection();
 
-                //checkPlaying();
-                if (playing) {
-                    metronome.setBeat(section.getBeatsPerBar());
-                }
+                updateMetronomeParameters();
             }
 
             @Override
@@ -148,13 +147,6 @@ public class MetronomeFragment extends Fragment implements MetronomeView {
 
             }
         });
-    }
-
-    private void checkPlaying() {
-        if (playing) {
-            stopTimer();
-            startTimer();
-        }
     }
 
     private void setupInjection() {
@@ -179,7 +171,9 @@ public class MetronomeFragment extends Fragment implements MetronomeView {
     @Override
     public void onDestroy() {
         presenter.onDestroy();
-        stopTimer();
+        if (playing) {
+            stopTimer();
+        }
         super.onDestroy();
     }
 
@@ -291,12 +285,20 @@ public class MetronomeFragment extends Fragment implements MetronomeView {
         this.section.setMiliseconds(60000 / beat);
         if (update) {
             updateSection();
+            updateMetronomeParameters();
+        }
+    }
+
+    private void updateMetronomeParameters() {
+        if (playing){
+            metronome.setUpVariables(section.getBeat(), section.getBeatsPerBar(), 523.25, 880);
         }
     }
 
     private void editName(boolean update) {
         int imgResource;
-        if (editing) {
+        editing = !editing;
+        if (!editing) {
             imgResource = android.R.drawable.ic_menu_edit;
             setName(update);
         } else {
@@ -305,7 +307,6 @@ public class MetronomeFragment extends Fragment implements MetronomeView {
             imm.showSoftInput(textSectionName, InputMethodManager.SHOW_IMPLICIT);
             textSectionName.selectAll();
         }
-        editing = !editing;
         textSectionName.setEnabled(editing);
         imgEditName.setImageResource(imgResource);
     }
@@ -336,6 +337,12 @@ public class MetronomeFragment extends Fragment implements MetronomeView {
         textSectionName.setEnabled(false);
         imgEditName.setImageResource(android.R.drawable.ic_menu_edit);
         editing = false;
+        if (this.section.getTrackId() != Track.ID_DEFAULT) {
+            imgEditName.setVisibility(View.VISIBLE);
+        }
+        else {
+            imgEditName.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void createNewSection(String name) {

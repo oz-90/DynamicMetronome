@@ -8,4 +8,5 @@ import com.oz90.dynamicmetronome.entities.Section;
 public interface PresetsRepository {
     void getPresets();
     void deletePreset(Section section);
+    void undoDelete(Section section);
 }

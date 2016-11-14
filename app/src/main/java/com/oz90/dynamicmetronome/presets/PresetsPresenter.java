@@ -14,6 +14,7 @@ public interface PresetsPresenter {
 
     void getPresets();
     void deletePreset(Section section);
+    void undoDelete(Section section);
 
     void onEventMainThread(PresetsEvent event);
 }

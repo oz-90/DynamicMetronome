@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.oz90.dynamicmetronome.R;
 import com.oz90.dynamicmetronome.entities.Section;
+import com.oz90.dynamicmetronome.entities.Track;
 
 import java.util.List;
 
@@ -41,6 +42,9 @@ public class PresetsAdapter extends RecyclerView.Adapter<PresetsAdapter.ViewHold
         holder.textBeat.setText("Beat: " + Integer.toString(currentSection.getBeat()));
         holder.textBeatsPerBar.setText("Beats per bar: " + Integer.toString(currentSection.getBeatsPerBar()));
         holder.setOnClickListener(currentSection, clickListener);
+        if (currentSection.getTrackId() == Track.ID_DEFAULT){
+            holder.imgDeleteSection.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override

@@ -8,4 +8,5 @@ import com.oz90.dynamicmetronome.entities.Section;
 public interface PresetsInteractor {
     void executeGetPresets();
     void executeDeletePreset(Section section);
+    void executeUndoDelete(Section section);
 }

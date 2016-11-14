@@ -56,6 +56,11 @@ public class PresetsPresenterImpl implements PresetsPresenter {
     }
 
     @Override
+    public void undoDelete(Section section) {
+        interactor.executeUndoDelete(section);
+    }
+
+    @Override
     @Subscribe
     public void onEventMainThread(PresetsEvent event) {
         if (this.view != null) {
@@ -68,6 +73,10 @@ public class PresetsPresenterImpl implements PresetsPresenter {
                     case PresetsEvent.DELETE_EVENT:
                         Section section = event.getSectionList().get(0);
                         view.sectionDeleted(section);
+                        break;
+                    case  PresetsEvent.UNDO_EVENT:
+                        view.setSections(event.getSectionList());
+                        break;
                 }
             }
             else {

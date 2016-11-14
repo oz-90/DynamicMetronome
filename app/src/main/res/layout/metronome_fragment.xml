@@ -17,6 +17,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Medium Text"
+            android:hint="@string/metronome.section.name.hint"
             android:id="@+id/textSectionName"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
@@ -37,57 +38,60 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"/>
-
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="-1"
-            android:id="@+id/btnMinusOne"
-            android:layout_below="@id/textSectionName"
-            android:layout_toLeftOf="@+id/textBeat"
-            android:layout_toStartOf="@+id/textBeat" />
-
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="+1"
-            android:id="@+id/btnPlusOne"
-            android:layout_above="@+id/textBeat"
-            android:layout_toRightOf="@+id/textBeat"
-            android:layout_toEndOf="@+id/textBeat" />
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:contentDescription="@string/metronome.edit.button.description"/>
 
         <EditText
             android:layout_width="@dimen/text_beat_size_double"
             android:layout_height="@dimen/text_beat_size"
             android:inputType="number"
-            android:text="150"
+            android:text="@string/metronome.beat.default.text"
             android:id="@+id/textBeat"
-            android:layout_below="@+id/btnMinusOne"
             android:gravity="center"
-            android:layout_centerHorizontal="true" />
+            android:layout_below="@+id/imgEditName"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@+id/linearLayout" />
 
         <Button
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="-5"
+            android:text="@string/metronome.plus.five"
+            android:id="@+id/btnPlusFive"
+            android:layout_below="@+id/imgEditName"
+            android:layout_toRightOf="@+id/btnPlusOne"
+            android:layout_toEndOf="@+id/btnPlusOne"/>
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/metronome.plus.one"
+            android:id="@+id/btnPlusOne"
+            android:layout_alignTop="@+id/textBeat"
+            android:layout_toRightOf="@+id/textBeat"
+            android:layout_toEndOf="@+id/textBeat" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/metronome.minus.five"
             android:id="@+id/btnMinusFive"
-            android:layout_below="@+id/textBeat"
+            android:layout_alignBaseline="@+id/btnMinusOne"
+            android:layout_alignBottom="@+id/btnMinusOne"
+            android:layout_toLeftOf="@+id/btnMinusOne"
+            android:layout_toStartOf="@+id/btnMinusOne" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/metronome.minus.one"
+            android:id="@+id/btnMinusOne"
+            android:layout_alignTop="@+id/textBeat"
             android:layout_toLeftOf="@+id/textBeat"
             android:layout_toStartOf="@+id/textBeat" />
-
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="+5"
-            android:id="@+id/btnPlusFive"
-            android:layout_below="@+id/textBeat"
-            android:layout_alignLeft="@+id/btnPlusOne"
-            android:layout_alignStart="@+id/btnPlusOne" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -95,7 +99,8 @@
             android:layout_below="@id/btnPlusFive"
             android:orientation="vertical"
             android:layout_margin="@dimen/activity_horizontal_margin"
-            android:gravity="center">
+            android:gravity="center"
+            android:id="@+id/linearLayout">
 
             <SeekBar
                 android:layout_width="match_parent"
@@ -113,31 +118,43 @@
                 android:layout_gravity="center"
                 android:backgroundTint="@color/colorPrimaryDark"
                 android:tint="@android:color/white"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"/>
-
-            <Spinner
-                android:layout_width="@dimen/beats_per_bar"
-                android:layout_height="41dp"
-                android:id="@+id/spinnerBeatsPerBar"
-                android:gravity="center"
-                android:paddingLeft="20dp"></Spinner>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/metronome.title.beats.per.bar"
-                android:id="@+id/textBeatsPerBar"
-                android:layout_gravity="center_horizontal" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textTick"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:layout_marginTop="@dimen/text_tick_margin"/>
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:contentDescription="@string/metronome.play.button.description"/>
 
         </LinearLayout>
+
+        <Spinner
+            android:layout_width="@dimen/beats_per_bar"
+            android:layout_height="41dp"
+            android:id="@+id/spinnerBeatsPerBar"
+            android:gravity="center"
+            android:layout_alignRight="@+id/linearLayout"
+            android:layout_alignEnd="@+id/linearLayout"
+            android:layout_toRightOf="@+id/textBeat"
+            android:layout_toEndOf="@+id/textBeat"
+            android:layout_below="@+id/linearLayout"></Spinner>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/metronome.title.beats.per.bar"
+            android:id="@+id/textBeatsPerBar"
+            android:layout_gravity="center_horizontal"
+            android:layout_toLeftOf="@+id/spinnerBeatsPerBar"
+            android:layout_toStartOf="@+id/textBeat"
+            android:layout_below="@+id/linearLayout"/>
+
+        <TextView
+            android:layout_width="@dimen/text_beat_size_double"
+            android:layout_height="wrap_content"
+            android:id="@+id/textTick"
+            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_below="@id/textBeatsPerBar"
+            android:layout_toRightOf="@+id/textBeatsPerBar"
+            android:layout_toEndOf="@+id/textBeatsPerBar"
+            />
 
     </RelativeLayout>
 </FrameLayout>

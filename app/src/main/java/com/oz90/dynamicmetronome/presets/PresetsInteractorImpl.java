@@ -21,4 +21,9 @@ public class PresetsInteractorImpl implements PresetsInteractor {
     public void executeDeletePreset(Section section) {
         repository.deletePreset(section);
     }
+
+    @Override
+    public void executeUndoDelete(Section section) {
+        repository.undoDelete(section);
+    }
 }

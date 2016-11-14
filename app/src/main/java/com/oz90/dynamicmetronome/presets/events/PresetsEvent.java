@@ -14,6 +14,7 @@ public class PresetsEvent {
 
     public final static int READ_EVENT = 0;
     public final static int DELETE_EVENT = 1;
+    public final static int UNDO_EVENT = 2;
 
     public int getType() {
         return type;

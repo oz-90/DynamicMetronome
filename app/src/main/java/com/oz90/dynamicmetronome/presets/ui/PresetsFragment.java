@@ -125,10 +125,15 @@ public class PresetsFragment extends Fragment implements PresetsView, OnItemClic
     }
 
     @Override
-    public void onDeleteClick(Section section) {
-        int deletingSection = section.getSectionId();
+    public void onDeleteClick(final Section section) {
         int playingSection = mainActivity.getPlayingSection();
-        Log.i("DELETING SECTION", "onDeleteClick: DELETE: " + section.getSectionId() + " PLAYING: " + playingSection);
+        //Snackbar.make(container, String.format(getString(R.string.sections_delete_message), section.getName()), Snackbar.LENGTH_LONG).show();
+        Snackbar.make(container, String.format(getString(R.string.sections_delete_message), section.getName()), Snackbar.LENGTH_LONG).setAction(R.string.sections_delete_undo_message, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.undoDelete(section);
+            }
+        }).show();
         if (section.getSectionId() == playingSection) {
             mainActivity.getMainMetronome();
         }

@@ -9,4 +9,13 @@
     <string name="sections.delete.message">Deleted preset: %s</string>
     <string name="sections.adapter.beat.tittle">Beat: %s</string>
     <string name="sections.adapter.beat.per.bar.tittle">Beat per bar: %s</string>
+    <string name="sections.delete.undo.message">Undo</string>
+    <string name="metronome.beat.default.text">150</string>
+    <string name="metronome.minus.one">-1</string>
+    <string name="metronome.minus.five">-5</string>
+    <string name="metronome.plus.one">+1</string>
+    <string name="metronome.plus.five">+5</string>
+    <string name="metronome.section.name.hint">Metronome name</string>
+    <string name="metronome.edit.button.description">Edit name button</string>
+    <string name="metronome.play.button.description">Play button</string>
 </resources>
