@@ -13,6 +13,7 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
  */
 @Table(database = MetronomeDataBase.class)
 public class Section extends BaseModel {
+    public final static int ID_DEFAULT = 1;
     public final static String NAME_DEFAULT = "Metronome";
     public final static String NEW_NAME_DEFAULT = "New metronome";
     public final static int BEAT_DEFAULT = 120;
@@ -34,7 +35,8 @@ public class Section extends BaseModel {
         this.repetition = repetition;
     }
 
-    public Section(String name, int beat, long miliseconds, int beatsPerBar, int repetition) {
+    public Section(int trackId, String name, int beat, long miliseconds, int beatsPerBar, int repetition) {
+        this.trackId = trackId;
         this.name = name;
         this.beat = beat;
         this.miliseconds = miliseconds;

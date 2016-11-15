@@ -29,6 +29,6 @@ public class MetronomeInteractorImpl implements MetronomeInteractor {
 
     @Override
     public void executeCreate(String name) {
-        repository.createNewSection(name);
+        repository.createDefaultTrackNewSection(name);
     }
 }

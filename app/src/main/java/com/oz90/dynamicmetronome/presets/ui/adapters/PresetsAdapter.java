@@ -38,12 +38,14 @@ public class PresetsAdapter extends RecyclerView.Adapter<PresetsAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Section currentSection = sectionList.get(position);
-        holder.textSectionName.setText(currentSection.getName());
-        holder.textBeat.setText("Beat: " + Integer.toString(currentSection.getBeat()));
-        holder.textBeatsPerBar.setText("Beats per bar: " + Integer.toString(currentSection.getBeatsPerBar()));
-        holder.setOnClickListener(currentSection, clickListener);
-        if (currentSection.getTrackId() == Track.ID_DEFAULT){
-            holder.imgDeleteSection.setVisibility(View.INVISIBLE);
+        if (currentSection != null) {
+            holder.textSectionName.setText(currentSection.getName());
+            holder.textBeat.setText("Beat: " + Integer.toString(currentSection.getBeat()));
+            holder.textBeatsPerBar.setText("Beats per bar: " + Integer.toString(currentSection.getBeatsPerBar()));
+            holder.setOnClickListener(currentSection, clickListener);
+            if (currentSection.getSectionId() == Section.ID_DEFAULT){
+                holder.imgDeleteSection.setVisibility(View.INVISIBLE);
+            }
         }
     }
 

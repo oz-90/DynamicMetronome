@@ -1,7 +1,5 @@
 package com.oz90.dynamicmetronome.metronome;
 
-import android.util.Log;
-
 import com.oz90.dynamicmetronome.entities.Section;
 import com.oz90.dynamicmetronome.entities.Section_Table;
 import com.oz90.dynamicmetronome.entities.Track;
@@ -25,7 +23,7 @@ public class MetronomeRepositoryImpl implements MetronomeRepository {
     public void getDefaultSection() {
         try {
             Section section = new FlowCursorList<Section>(false, Section.class,
-                                    Condition.column(Section_Table.trackId_trackId.getNameAlias()).is(Track.ID_DEFAULT)).getItem(0);
+                                    Condition.column(Section_Table.sectionId.getNameAlias()).is(Section.ID_DEFAULT)).getItem(0);
             //Verifica si ya existe la sección default. Si no, la crea.
             if (section == null) {
                 section = createDefaultSection();
@@ -53,7 +51,7 @@ public class MetronomeRepositoryImpl implements MetronomeRepository {
         track.save();
         //Crea la sección default.
         long miliseconds = 60000 / Section.BEAT_DEFAULT;
-        Section section = new Section(Track.ID_DEFAULT,
+        Section section = new Section(Section.ID_DEFAULT,
                 Track.ID_DEFAULT,
                 Section.NAME_DEFAULT,
                 Section.BEAT_DEFAULT,
@@ -74,19 +72,25 @@ public class MetronomeRepositoryImpl implements MetronomeRepository {
     }
 
     @Override
-    public void createNewSection(String name) {
+    public void createDefaultTrackNewSection(String name) {
         try {
-            long miliseconds = 60000 / Section.BEAT_DEFAULT;
-            Section newSection = new Section(name,
-                    Section.BEAT_DEFAULT,
-                    miliseconds,
-                    Section.BEATS_PER_BAR_DEFAULT,
-                    Section.REPETITION_DEFAULT);
-            newSection.save();
+            Section newSection = createNewSection(name, Track.ID_DEFAULT);
             post(MetronomeEvent.CREATE_EVENT, newSection);
         } catch (Exception e) {
             post(MetronomeEvent.CREATE_EVENT, e.getLocalizedMessage());
         }
+    }
+
+    private Section createNewSection(String name, int idTrack) {
+        long milliseconds = 60000 / Section.BEAT_DEFAULT;
+        Section newSection = new Section(idTrack,
+                name,
+                Section.BEAT_DEFAULT,
+                milliseconds,
+                Section.BEATS_PER_BAR_DEFAULT,
+                Section.REPETITION_DEFAULT);
+        newSection.save();
+        return newSection;
     }
 
     private void post(int type, Section section, String error) {

@@ -337,7 +337,7 @@ public class MetronomeFragment extends Fragment implements MetronomeView {
         textSectionName.setEnabled(false);
         imgEditName.setImageResource(android.R.drawable.ic_menu_edit);
         editing = false;
-        if (this.section.getTrackId() != Track.ID_DEFAULT) {
+        if (this.section.getSectionId() != Section.ID_DEFAULT) {
             imgEditName.setVisibility(View.VISIBLE);
         }
         else {

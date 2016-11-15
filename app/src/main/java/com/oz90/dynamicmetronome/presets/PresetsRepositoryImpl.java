@@ -82,11 +82,12 @@ public class PresetsRepositoryImpl implements PresetsRepository {
     public List<Section> getSectionsAllList() {
         //GET ALL THE SECTIONS, EXCEPT FOR THE DEFAULT ONE.
         List<Section> sections = new FlowCursorList<Section>(false, new Select().from(Section.class)
-                                                                                    .where(Condition.column(Section_Table.trackId_trackId.getNameAlias()).isNot(Track.ID_DEFAULT))
+                                                                                    .where(Condition.column(Section_Table.trackId_trackId.getNameAlias()).is(Track.ID_DEFAULT)
+                                                                                            ,Condition.column(Section_Table.sectionId.getNameAlias()).isNot(Section.ID_DEFAULT))
                                                                                     .orderBy(Section_Table.name.getNameAlias(), true)).getAll();
         //GET THE DEFAULT SECTION AND ADD IT AT THE TOP OF THE SECTIONS LIST.
         Section defaultSection = new FlowCursorList<Section>(false, Section.class,
-                Condition.column(Section_Table.trackId_trackId.getNameAlias()).is(Track.ID_DEFAULT)).getItem(0);
+                Condition.column(Section_Table.sectionId.getNameAlias()).is(Section.ID_DEFAULT)).getItem(0);
         sections.add(0, defaultSection);
         return sections;
     }

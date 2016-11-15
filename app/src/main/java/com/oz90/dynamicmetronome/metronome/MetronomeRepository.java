@@ -9,5 +9,5 @@ public interface MetronomeRepository {
     void getDefaultSection();
     void getSection(int sectionId);
     void updateSection(Section section);
-    void createNewSection(String name);
+    void createDefaultTrackNewSection(String name);
 }
